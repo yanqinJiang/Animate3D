@@ -19,7 +19,7 @@ Qualitative and quantitative experiments demonstrate that Animate3D significantl
 Data, code, and models will be open-released.
 
 # News
-[**2024.07.17**] The paper of Consistent4D is avaliable at [arXiv]().
+[**2024.07.17**] The paper of Animate3D is avaliable at [arXiv]().
 
 # Citation
 ```bibtex
