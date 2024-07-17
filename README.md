@@ -3,7 +3,7 @@ Yanqin Jiang<sup>1*</sup>, Chaohui Yu<sup>2*</sup>, Chenjie Cao<sup>2</sup>, Fan
 
 <sup>1</sup>CASIA, <sup>2</sup>DAMO Academy, Alibaba Group
 
-| [Project Page](https://animate3d.github.io/) | [arXiv]() | [Paper]() | [Video](https://www.youtube.com/watch?v=qkaeeGzLnY8) | Data |
+| [Project Page](https://animate3d.github.io/) | [arXiv](https://arxiv.org/abs/2407.11398) | Paper | [Video](https://www.youtube.com/watch?v=qkaeeGzLnY8) | Data |
 
 ![Demo GIF](https://github.com/animate3d/animate3d.github.io/blob/main/assets/bg.gif)
 
@@ -19,7 +19,7 @@ Qualitative and quantitative experiments demonstrate that Animate3D significantl
 Data, code, and models will be open-released.
 
 # News
-[**2024.07.17**] The paper of Animate3D is avaliable at [arXiv]().
+[**2024.07.17**] The paper of Animate3D is avaliable at [arXiv](https://arxiv.org/abs/2407.11398).
 
 # Citation
 ```bibtex
