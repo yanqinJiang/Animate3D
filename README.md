@@ -7,6 +7,8 @@ Yanqin Jiang<sup>1*</sup>, Chaohui Yu<sup>2*</sup>, Chenjie Cao<sup>2</sup>, Fan
 
 ![Demo GIF](https://github.com/animate3d/animate3d.github.io/blob/main/assets/bg.gif)
 
+![Demo GIF](https://github.com/animate3d/animate3d.github.io/blob/main/assets/mesh_demo_resized.gif)
+
 # Abstract
 Recent advances in 4D generation mainly focus on generating 4D content by distilling pre-trained text or single-view image-conditioned models. 
 It is inconvenient for them to take advantage of various off-the-shelf 3D assets with multi-view attributes, and their results suffer from spatiotemporal inconsistency owing to the inherent ambiguity in the supervision signals.
@@ -19,6 +21,7 @@ Qualitative and quantitative experiments demonstrate that Animate3D significantl
 Data, code, and models will be open-released.
 
 # News
+[**2024.09.10**] 😄❤️❤️ **Animate3D introduces an exciting new feature: Mesh Animation. Mesh animation requires only 15 minutes in total.** We uploaded mesh animations to our project page one month ago, and now we provide **technical details** in [updated paper](https://arxiv.org/abs/2407.11398). **Examples of animated files in FBX format can be found [here](https://drive.google.com/file/d/1RpOhNA8c8Bm-ShCInHixH6Q-AR1ZTARN/view?usp=drive_link), ready for import into standard 3D software such as Blender.** <br>
 [**2024.07.17**] The paper of Animate3D is avaliable at [arXiv](https://arxiv.org/abs/2407.11398)! We achieve impressing results, and we present high-resolution video on our project page : )
 
 # Citation
