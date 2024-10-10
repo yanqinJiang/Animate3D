@@ -1,0 +1,47 @@
+i2v_cond_time_zero: false
+
+output_dir: "outputs"
+
+pretrained_model_path: "yanqinJiang/mvdream-sd1.5-diffusers"
+motion_adapter_path: "guoyww/animatediff-motion-adapter-v1-5-2"
+ip_adapter_path: "h94/IP-Adapter" # h94/IP-Adapter
+
+mvdream_attn_cfg:
+  image_attn:
+    enabled: true
+
+motion_module_attn_cfg:
+  enabled: true
+  spatial_attn:
+    enabled: true
+    attn_cfg:
+      use_spatial_encoding: true
+      spatial_encoding_type: "sinusoid"
+      use_camera_encoding: false
+      camera_encoding_type: "sinusoid"
+  image_attn:
+    enabled: false
+  use_alpha_blender: true
+
+# inference setting
+freeinit_enabled: true
+freeinit_num_iters: 3 # default value
+
+# unused: easy to generate static object
+# strength: 1.
+# origin_prob: 0.
+i2v_similarity_init: null
+
+
+noise_scheduler_kwargs:
+  num_train_timesteps: 1000
+  beta_start:          0.00085
+  beta_end:            0.012
+  beta_schedule:       "linear"
+  steps_offset:        1
+  clip_sample:         false
+
+seed:           [8673] 
+
+steps:          25
+guidance_scale: 7.5

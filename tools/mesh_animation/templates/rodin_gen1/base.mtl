@@ -1,0 +1,13 @@
+newmtl Material
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ns 96.078431
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd texture_diffuse.png
+map_Bump texture_normal.png
+map_Ks texture_metallic.png
+map_Ns texture_roughness.png
+map_Pr texture_pbr.png

@@ -1,0 +1,201 @@
+name: "recon"
+tag: "${rmspace:${system.prompt_processor.prompt},_}"
+exp_root_dir: "outputs/animate3d"
+seed: 0
+use_timestamp: False
+
+data_type: "simple-multi-image-datamodule"
+data:
+  image_root: data/animate3d/testset/tracking_rgba_images/butterfly
+  height: 256
+  width: 256
+  default_elevation_deg: 15.0 # must be float
+  default_azimuth_deg: [0.0, 90.0, 180.0, 270.0] # float
+  default_camera_distance: 3.0 # float
+  default_fovy_deg: 40.0 # float
+  requires_depth: false
+  n_view: 4
+  total_frame: 16
+  use_random_camera: false # multi-view image initialization
+  rays_d_normalize: false
+  random_camera:
+    batch_size: 64
+    n_view: 4
+    total_frame: 16
+    width: 256
+    height: 256
+    eval_height: 512
+    eval_width: 512
+    camera_distance_range: [0.8, 1.0] # relative
+    fovy_range: [15, 60]
+    elevation_range: [0, 30]
+    camera_perturb: 0.
+    center_perturb: 0.
+    up_perturb: 0.
+    n_val_views: 128
+    eval_camera_distance: 3.0
+    eval_fovy_deg: 40.
+
+system_type: "gaussian-splatting-animate3d-system"
+system:
+  
+  load_guidance: false
+  n_view: 4
+  n_frame: 16
+  progressive_iter_per_frame: 50
+
+  guidance_eval_feq: 100
+
+  geometry_type: "gaussian-splatting-4d"
+  geometry:
+    # kplanes
+    grid_size: [[50, 50, 50, 8], [100, 100, 100, 16]]
+    n_input_dims: 4
+    n_grid_dims: 16
+
+    use_global_trans: true
+    # lr for dynamic 
+    delta_xyz_network_lr: 0.0001
+    delta_rot_network_lr: 0.0001
+    delta_scaling_network_lr: 0.0001
+    grid_lr: 0.01
+    global_trans_lr: 0.001
+
+    # convert from 
+    geometry_convert_from: "data/animate3d/testset/pretrained_gaussian/butterfly.ply"
+
+    # load ply
+    load_ply_cfg:
+      rot_x_degree: 0.
+      rot_z_degree: 0.
+      scale_factor: 1.0
+    
+    # TODO: dummy
+    position_lr: 0.001
+    scale_lr: 0.01
+    feature_lr: 0.01
+    opacity_lr: 0.05
+    rotation_lr: 0.01
+    pred_normal: false
+    normal_lr: 0.001
+    densification_interval: 100000
+    prune_interval: 100000
+    opacity_reset_interval: 50000000
+    densify_from_iter: 100000
+    densify_until_iter: 200000
+    prune_from_iter: 100000
+    prune_until_iter: 200000
+    densify_grad_threshold: 
+    min_opac_prune: 100.
+    split_thresh: 100.
+    radii2d_thresh: 1000
+    
+  
+  renderer_type: "diff-gaussian-rasterizer-advanced-4d"
+  renderer:
+    invert_bg_prob: 1.0
+    back_ground_color: [0.5, 0.5, 0.5]
+
+    first_frame_trainable: false
+    
+  material_type: "no-material" # unused
+  material:
+    n_output_dims: 0
+
+  background_type: "solid-color-background" # unused
+  background:
+    color: [0.5, 0.5, 0.5]
+
+  prompt_processor_type: "stable-diffusion-prompt-processor"
+  prompt_processor:
+    pretrained_model_name_or_path: "stable-diffusion-v1-5/stable-diffusion-v1-5"
+    prompt: ???
+    negative_prompt: ""
+    front_threshold: 30.
+    back_threshold: 30.
+
+  guidance_type: "animatemv-diffusion-guidance"
+  guidance:
+    pretrained_model_name_or_path: "yanqinJiang/mvdream-sd1.5-diffusers"
+    motion_adapter_path: "guoyww/animatediff-motion-adapter-v1-5-2"
+    ip_adapter_path: "h94/IP-Adapter"
+    pretrained_unet_path: "pretrained_models/animate3d_motion_modules.ckpt" # path to a pre-downloaded checkpoint file (null for loading from URL)
+
+    noise_scheduler_kwargs:
+      num_train_timesteps: 1000
+      beta_start:          0.00085
+      beta_end:            0.012
+      beta_schedule:       "linear"
+      steps_offset:        1
+      clip_sample:         false
+
+    model_config:
+      i2v_cond_time_zero: false
+      motion_module_attn_cfg:
+        enabled: true
+        spatial_attn:
+          enabled: true
+          attn_cfg:
+            use_spatial_encoding: true
+            spatial_encoding_type: "sinusoid"
+            use_camera_encoding: false
+            camera_encoding_type: "sinusoid"
+        image_attn:
+          enabled: false
+        use_alpha_blender: true
+      mvdream_attn_cfg:
+        image_attn:
+          enabled: true
+    
+    n_view: ${data.n_view}
+    n_frame: ${data.random_camera.total_frame}
+
+    guidance_scale: 5.
+    min_step_percent: 0.02 # [0, 0.98, 0.02, 10000]  # (start_iter, start_val, end_val, end_iter)
+    max_step_percent: 0.2
+    recon_loss: true
+    recon_std_rescale: 0.25
+
+    half_precision_weights: True
+
+
+  loggers:
+    wandb:
+      enable: false
+      project: "threestudio"
+
+  loss:
+    lambda_sds: 0.01
+    lambda_image_sds: 0.1
+    lambda_rgb: 100.
+    lambda_first_frame_rgb: 0.
+    lambda_first_frame_mask: 0.
+    lambda_mask: 100.
+    lambda_position: 0. # 1.0
+    lambda_opacity: 0.
+    lambda_scales: 0.
+    lambda_sparsity: 0. # 1.0
+    lambda_tv_loss: 0.
+    lambda_depth_tv_loss: 0.
+    
+    # arap
+    lambda_arap: 12.
+    arap_radius: 0.01
+    arap_K: 3
+    arap_sample_num: 512
+    
+    # normal_tv
+    lambda_normal_tv: 0.
+
+trainer:
+  max_steps: 800
+  log_every_n_steps: 1
+  num_sanity_val_steps: 0
+  val_check_interval: 400
+  enable_progress_bar: true
+  precision: 16-mixed # 32-true 16-mixed
+
+checkpoint:
+  save_last: true
+  save_top_k: -1
+  every_n_train_steps: 800
